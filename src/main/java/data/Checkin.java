@@ -1,16 +1,17 @@
 package data;
 
 import java.util.List;
+import java.util.Map;
 
 public class Checkin {
-	private List<String> checkin_info;
+	private Map<String, Integer> checkin_info;
 	private String type;
 	private String business_id;
 	
-	public List<String> getCheckin_info() {
+	public Map<String, Integer> getCheckin_info() {
 		return checkin_info;
 	}
-	public void setCheckin_info(List<String> checkin_info) {
+	public void setCheckin_info(Map<String, Integer> checkin_info) {
 		this.checkin_info = checkin_info;
 	}
 	public String getType() {
