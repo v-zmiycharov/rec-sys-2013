@@ -1,11 +1,19 @@
 package statistics;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.io.FileUtils;
+
 import data.*;
+import utils.Constants;
+import utils.Formatter;
 import utils.Globals;
 
 public class Dependencies {
@@ -21,6 +29,9 @@ public class Dependencies {
 	private static double AverageCheckinsCount;
 	private static int MinCheckinsCount;
 	private static int MaxCheckinsCount;
+	
+	private static List<Point> ReviewsCountStarsPoints;
+	private static List<Point> CheckinsCountStarsPoints;
 	
 	private static void init() {
 		CheckinsMap = new HashMap<String, Checkin>();
@@ -38,6 +49,9 @@ public class Dependencies {
 		AverageCheckinsCount = 0.0;
 		MinCheckinsCount = Integer.MAX_VALUE;
 		MaxCheckinsCount = Integer.MIN_VALUE;
+		
+		ReviewsCountStarsPoints = new ArrayList<Point>();
+		CheckinsCountStarsPoints = new ArrayList<Point>();
 	}
 	
 	private static void calculateAveragesForIsOpen() {
@@ -54,6 +68,7 @@ public class Dependencies {
 					closedCount++;
 					AverageClosedStars += business.getStars();
 				}
+				
 			}
 		}
 		
@@ -99,19 +114,40 @@ public class Dependencies {
 		AverageCheckinsCount /= (double) Globals.BUSINESSES.size();
 	}
 	
-	private static void printResults() {
-		NumberFormat formatter = new DecimalFormat("#0.00"); 
+	private static void calculatePoints() throws Exception {
+		for(Business business : Globals.BUSINESSES) {
+			if(business.getStars() > 0) {
+				ReviewsCountStarsPoints.add(new Point(business.getReview_count(), business.getStars()));
+				
+				int checkinsCount = 0;
+				
+				if(CheckinsMap.containsKey(business.getBusiness_id())) {
+					for(int checkinForHour : CheckinsMap.get(business.getBusiness_id()).getCheckin_info().values()) {
+						checkinsCount += checkinForHour;
+					}
+				}
+
+				CheckinsCountStarsPoints.add(new Point(checkinsCount, business.getStars()));
+			}
+		}
 		
-		System.out.println("Average stars: Open - " + formatter.format(AverageOpenedStars) + "; Closed - " + formatter.format(AverageClosedStars) + ";" );
-		System.out.println("Reviews count: Min - " + MinReviewsCount + "; Avg - " + formatter.format(AverageReviewsCount) + "; Max - " + MaxReviewsCount + ";" );
-		System.out.println("Checkins count: Min - " + MinCheckinsCount + "; Avg - " + formatter.format(AverageCheckinsCount) + "; Max - " + MaxCheckinsCount + ";" );
+		FileUtils.writeStringToFile(new File(Constants.STATISTICS_REVIEW_POINTS_PATH), Point.listToString(ReviewsCountStarsPoints));
+		FileUtils.writeStringToFile(new File(Constants.STATISTICS_CHECKIN_POINTS_PATH), Point.listToString(CheckinsCountStarsPoints));
 	}
 	
-	public static void calculateDependencies() {
+	private static void printResults() {
+		System.out.println("Average stars: Open - " + Formatter.formatDouble(AverageOpenedStars) + "; Closed - " + Formatter.formatDouble(AverageClosedStars) + ";" );
+		System.out.println("Reviews count: Min - " + MinReviewsCount + "; Avg - " + Formatter.formatDouble(AverageReviewsCount) + "; Max - " + MaxReviewsCount + ";" );
+		System.out.println("Checkins count: Min - " + MinCheckinsCount + "; Avg - " + Formatter.formatDouble(AverageCheckinsCount) + "; Max - " + MaxCheckinsCount + ";" );
+	}
+	
+	public static void calculateDependencies() throws Exception {
 		init();
 		calculateAveragesForIsOpen();
 		calculateAveragesForReviews();
 		calculateAveragesForCheckins();
 		printResults();
+		
+		calculatePoints();
 	}
 }

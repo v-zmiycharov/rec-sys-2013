@@ -12,4 +12,7 @@ public class Constants {
 	public static final String TEST_USER_PATH = "./_DATA/final_test_set/final_test_set_user.json";
 
 	public static final String SUBMISSION_PATH = "./submission.csv";
+
+	public static final String STATISTICS_REVIEW_POINTS_PATH = "./statistics/review_points.dat";
+	public static final String STATISTICS_CHECKIN_POINTS_PATH = "./statistics/checkin_points.dat";
 }
