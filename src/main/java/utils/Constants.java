@@ -18,4 +18,9 @@ public class Constants {
 	
 	public static final String REVIEWS_DAT_FILE = "./_DATA/datamodel/reviews.dat";
 	public static final String REVIEWS_DAT_FILE_TEST = "./_DATA/datamodel/reviewsTest.dat";
+
+	public static final String SUBMISSION_USER = "./submissions/userBased.csv";
+	public static final String SUBMISSION_ITEM = "./submissions/itemBased.csv";
+	public static final String SUBMISSION_SVD = "./submissions/svd.csv";
+	public static final String SUBMISSION_SVD_PLUS_PLUS = "./submissions/svdPlusPlus.csv";
 }

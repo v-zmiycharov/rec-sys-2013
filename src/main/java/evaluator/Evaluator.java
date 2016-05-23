@@ -26,7 +26,9 @@ import org.apache.mahout.cf.taste.similarity.ItemSimilarity;
 import org.apache.mahout.cf.taste.similarity.UserSimilarity;
 
 import utils.Constants;
+import utils.Globals;
 import data.Review;
+import statistics.StatisticsClassifier;
 
 
 public class Evaluator {
@@ -108,7 +110,7 @@ public class Evaluator {
 		System.out.println("SVD ended!" +  new Date().toString());
 	}
 	
-	public  void svdPlusPlus(List<Review> reviewsForEvaluation) throws TasteException{
+	public void svdPlusPlus(List<Review> reviewsForEvaluation) throws TasteException{
 		System.out.println("SVD++ started!" +  new Date().toString());
 		
 		Recommender recommender=new SVDRecommender(model,new SVDPlusPlusFactorizer(model, 30, 100));
@@ -129,4 +131,18 @@ public class Evaluator {
 		System.out.println("SVD++ ended!" +  new Date().toString());
 	}
 
+	
+	public static void calculateFinalResults(List<Review> reviewsForEvaluation) throws Exception{
+		StatisticsClassifier.init();
+		
+		for(Review review : reviewsForEvaluation){
+			double stars = 
+					0.4 * StatisticsClassifier.getStarsByIsOpen(review.getBusiness_id())
+					+ 0.4 * StatisticsClassifier.getStarsByCheckinsCount(review.getBusiness_id())
+					+ 0.4 * StatisticsClassifier.getStarsByReviewsCount(review.getBusiness_id())
+					+ 8.8 * Globals.SvdResults.get(review.getReview_id());
+			
+			review.setStars(stars);
+		}
+	}
 }

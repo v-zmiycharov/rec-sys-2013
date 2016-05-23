@@ -1,10 +1,17 @@
 package utils;
 
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.io.FileUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
@@ -24,6 +31,11 @@ public class Globals {
 
 	public static List<Review> TEST_REVIEWS;
 
+	public static Map<String, Double> UserBasedResults;
+	public static Map<String, Double> ItemBasedResults;
+	public static Map<String, Double> SvdResults;
+	public static Map<String, Double> SvdPlusPlusResults;
+
 	public static void init() throws Exception {
 		initBusinesses();
 		initCheckins();
@@ -34,7 +46,7 @@ public class Globals {
 		initTestReviews();
 	}
 	
-	public static void initBusinesses() throws Exception {
+	private static void initBusinesses() throws Exception {
 		Gson gson = new Gson();
 		BUSINESSES = new ArrayList<Business>();
 
@@ -47,7 +59,7 @@ public class Globals {
 		}
 	}
 
-	public static void initCheckins() throws Exception {
+	private static void initCheckins() throws Exception {
 		Gson gson = new Gson();
 		CHECKINS = new ArrayList<Checkin>();
 
@@ -60,7 +72,7 @@ public class Globals {
 		}
 	}
 
-	public static void initUsers() throws Exception {
+	private static void initUsers() throws Exception {
 		Gson gson = new Gson();
 		USERS = new ArrayList<User>();
 
@@ -73,7 +85,7 @@ public class Globals {
 		}
 	}
 
-	public static void initTrainReviews() throws Exception {
+	private static void initTrainReviews() throws Exception {
 		Gson gson = new Gson();
 		TRAIN_REVIEWS = new ArrayList<Review>();
 
@@ -83,7 +95,7 @@ public class Globals {
 		}
 	}
 
-	public static void initTestReviews() throws Exception {
+	private static void initTestReviews() throws Exception {
 		Gson gson = new Gson();
 		TEST_REVIEWS = new ArrayList<Review>();
 
@@ -154,5 +166,25 @@ public class Globals {
 			System.out.println("ex:" + ex);
 		}
 
+	}
+
+	public static void initSubmissionResults() throws Exception {
+		UserBasedResults = initSubmissionResults(Constants.SUBMISSION_USER);
+		ItemBasedResults = initSubmissionResults(Constants.SUBMISSION_ITEM);
+		SvdResults = initSubmissionResults(Constants.SUBMISSION_SVD);
+		SvdPlusPlusResults = initSubmissionResults(Constants.SUBMISSION_SVD_PLUS_PLUS);
+	}
+	
+	private static Map<String, Double> initSubmissionResults(String fileName) throws Exception {
+		Map<String, Double> result = new HashMap<String, Double>();
+		List<String> lines = FileUtils.readLines(new File(fileName));
+		lines.remove(0);
+
+		for(String line : lines) {
+			String[] splitted = line.split(",");
+			result.put(splitted[0], Double.parseDouble(splitted[1]));
+		}
+		
+		return result;
 	}
 }
