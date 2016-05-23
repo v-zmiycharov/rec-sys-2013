@@ -30,7 +30,8 @@ private static Writer writer;
 				
 				String line = IdConvertor.intHash(review.getUser_id()) + "::" + 
 								IdConvertor.intHash(review.getBusiness_id()) + "::" + 
-								review.getStars();
+								review.getStars() + "::" + 
+								review.getDate().getTime()/1000;
 				
 				line = line.replace("\n", " ");
 				try {
