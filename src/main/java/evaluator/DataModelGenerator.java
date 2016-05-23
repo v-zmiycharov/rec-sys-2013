@@ -16,7 +16,7 @@ public class DataModelGenerator {
 
 private static Writer writer;
 	
-	public static void writeDataModel() throws UnsupportedEncodingException, FileNotFoundException {
+	public static void writeDataModel() throws Exception {
 		if (Globals.TRAIN_REVIEWS != null) {
 
 			writer = new BufferedWriter(new OutputStreamWriter(
@@ -24,8 +24,8 @@ private static Writer writer;
 			
 			for (Review review : Globals.TRAIN_REVIEWS) {
 				
-				String line = IdConvertor.intHash(review.getUser_id()) + "::" + 
-								IdConvertor.intHash(review.getBusiness_id()) + "::" + 
+				String line = IdConvertor.convertUserId(review.getUser_id()) + "::" + 
+								IdConvertor.convertBusinessId(review.getBusiness_id()) + "::" + 
 								review.getStars() + "::" + 
 								review.getDate().getTime()/1000;
 				

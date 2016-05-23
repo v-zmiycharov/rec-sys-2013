@@ -6,3 +6,20 @@ Reviews:
 
 Checkins:
 0-500: 3.67; 500-1000: 3.82; 1000-1500: 3.85; 1500+: 3.76;
+
+Comments:
+STUPID FORMAT! Users, businesses x2, missing users! ?!
+
+Time:
+user based: 6 min
+item based: 10 seconds
+svd: 50 min
+svd++: 4 min
+
+Results:
+user based:
+item based:
+svd:
+svd++:
+
+Mixed:

@@ -40,7 +40,7 @@ public class Evaluator {
 		model = new FileDataModel(file, "::");
 	}
 
-	public void userBased(List<Review> reviewsForEvaluation) throws TasteException{
+	public void userBased(List<Review> reviewsForEvaluation) throws Exception{
 		System.out.println("Users based started!" +  new Date().toString());
 	
 		UserSimilarity similarity = new PearsonCorrelationSimilarity(model);
@@ -49,7 +49,7 @@ public class Evaluator {
 		
 		for(Review review : reviewsForEvaluation){
 			try{
-			float estimation = recommender.estimatePreference(IdConvertor.intHash(review.getUser_id()), IdConvertor.intHash(review.getBusiness_id()));
+			float estimation = recommender.estimatePreference(IdConvertor.convertUserId(review.getUser_id()), IdConvertor.convertBusinessId(review.getBusiness_id()));
 			if(estimation >= 0){
 				review.setStars(estimation);
 				//System.out.println("Review: " + review.getReview_id() + " = " + review.getUser_id() + " - " + review.getBusiness_id() + ": "+estimation );
@@ -67,7 +67,7 @@ public class Evaluator {
 
 	}
 	
-	public  void itemBased(List<Review> reviewsForEvaluation) throws TasteException{
+	public  void itemBased(List<Review> reviewsForEvaluation) throws Exception{
 		System.out.println("Items based started!" +  new Date().toString());
 		
 		ItemSimilarity itemSimilarity = new EuclideanDistanceSimilarity (model);
@@ -75,7 +75,7 @@ public class Evaluator {
 		
 		for(Review review : reviewsForEvaluation){
 			try{
-			float estimation = recommender.estimatePreference(IdConvertor.intHash(review.getUser_id()), IdConvertor.intHash(review.getBusiness_id()));
+			float estimation = recommender.estimatePreference(IdConvertor.convertUserId(review.getUser_id()), IdConvertor.convertBusinessId(review.getBusiness_id()));
 			if(estimation >= 0)
 				review.setStars(estimation);
 //				System.out.println("Review: " + review.getReview_id() + " = " + review.getUser_id() + " - " + review.getBusiness_id() + ": "+estimation );
@@ -89,14 +89,14 @@ public class Evaluator {
 		System.out.println("Items based ended!" +  new Date().toString());
 	}
 	
-	public  void svd(List<Review> reviewsForEvaluation) throws TasteException{
+	public  void svd(List<Review> reviewsForEvaluation) throws Exception{
 		System.out.println("SVD started!" +  new Date().toString());
 		
 		Recommender recommender=new SVDRecommender(model,new ALSWRFactorizer(model, 30, 0.065, 100));
 		
 		for(Review review : reviewsForEvaluation){
 			try{
-			float estimation = recommender.estimatePreference(IdConvertor.intHash(review.getUser_id()), IdConvertor.intHash(review.getBusiness_id()));
+			float estimation = recommender.estimatePreference(IdConvertor.convertUserId(review.getUser_id()), IdConvertor.convertBusinessId(review.getBusiness_id()));
 			if(estimation >= 0)
 				review.setStars(estimation);
 //				System.out.println("Review: " + review.getReview_id() + " = " + review.getUser_id() + " - " + review.getBusiness_id() + ": "+estimation );
@@ -110,14 +110,14 @@ public class Evaluator {
 		System.out.println("SVD ended!" +  new Date().toString());
 	}
 	
-	public void svdPlusPlus(List<Review> reviewsForEvaluation) throws TasteException{
+	public void svdPlusPlus(List<Review> reviewsForEvaluation) throws Exception{
 		System.out.println("SVD++ started!" +  new Date().toString());
 		
 		Recommender recommender=new SVDRecommender(model,new SVDPlusPlusFactorizer(model, 30, 100));
 		
 		for(Review review : reviewsForEvaluation){
 			try{
-			float estimation = recommender.estimatePreference(IdConvertor.intHash(review.getUser_id()), IdConvertor.intHash(review.getBusiness_id()));
+			float estimation = recommender.estimatePreference(IdConvertor.convertUserId(review.getUser_id()), IdConvertor.convertBusinessId(review.getBusiness_id()));
 			if(estimation >= 0)
 				review.setStars(estimation);
 //				System.out.println("Review: " + review.getReview_id() + " = " + review.getUser_id() + " - " + review.getBusiness_id() + ": "+estimation );

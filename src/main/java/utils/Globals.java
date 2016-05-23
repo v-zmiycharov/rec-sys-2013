@@ -21,6 +21,7 @@ import data.Checkin;
 import data.Review;
 import data.User;
 import evaluator.DataModelGenerator;
+import evaluator.IdConvertor;
 
 public class Globals {
 	public static List<Business> BUSINESSES;
@@ -40,10 +41,17 @@ public class Globals {
 		initBusinesses();
 		initCheckins();
 		initUsers();
-		// 	UNCOMMENT TO REGENERATE TRAIN MODEL
-		//	initTrainReviews();
-		//	DataModelGenerator.writeDataModel();
+		
+		boolean trainModels = true;
+		if(trainModels)
+			initTrainReviews();
+
 		initTestReviews();
+		
+		IdConvertor.init();
+		
+		if(trainModels)
+			DataModelGenerator.writeDataModel();
 	}
 	
 	private static void initBusinesses() throws Exception {
