@@ -90,7 +90,7 @@ public class Evaluator {
 	public  void svd(List<Review> reviewsForEvaluation) throws TasteException{
 		System.out.println("SVD started!" +  new Date().toString());
 		
-		Recommender recommender=new SVDRecommender(model,new ALSWRFactorizer(model, 4, 0.065, 100));
+		Recommender recommender=new SVDRecommender(model,new ALSWRFactorizer(model, 30, 0.065, 100));
 		
 		for(Review review : reviewsForEvaluation){
 			try{
@@ -111,7 +111,7 @@ public class Evaluator {
 	public  void svdPlusPlus(List<Review> reviewsForEvaluation) throws TasteException{
 		System.out.println("SVD++ started!" +  new Date().toString());
 		
-		Recommender recommender=new SVDRecommender(model,new SVDPlusPlusFactorizer(model, 4, 50));
+		Recommender recommender=new SVDRecommender(model,new SVDPlusPlusFactorizer(model, 30, 100));
 		
 		for(Review review : reviewsForEvaluation){
 			try{
