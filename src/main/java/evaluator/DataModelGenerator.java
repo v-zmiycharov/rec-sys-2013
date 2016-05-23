@@ -8,6 +8,8 @@ import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 
+import org.apache.commons.io.FileUtils;
+
 import utils.Constants;
 import utils.Globals;
 import data.Review;
@@ -18,7 +20,6 @@ private static Writer writer;
 	
 	public static void writeDataModel() throws Exception {
 		if (Globals.TRAIN_REVIEWS != null) {
-
 			writer = new BufferedWriter(new OutputStreamWriter(
 					new FileOutputStream(Constants.REVIEWS_DAT_FILE, true), "utf-8"));
 			
