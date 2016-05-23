@@ -14,10 +14,10 @@ public class Program {
 		Evaluator eval = new Evaluator(Constants.REVIEWS_DAT_FILE);
 
 		// Uncomment ONE
-		eval.userBased(Globals.TEST_REVIEWS);
+//		eval.userBased(Globals.TEST_REVIEWS);
 //		eval.itemBased(Globals.TEST_REVIEWS);
 //		eval.svd(Globals.TEST_REVIEWS);
-//		eval.svdPlusPlus(Globals.TEST_REVIEWS);
+		eval.svdPlusPlus(Globals.TEST_REVIEWS);
 		// Uncomment ONE
 	
 		SubmissionGenerator.generateSubmissions();

@@ -1,0 +1,13 @@
+Time:
+user based: 6 min
+item based: 10 seconds
+svd: 50 min
+svd++: 4 min
+
+Results:
+user based:
+item based:
+svd:
+svd++:
+
+Mixed:
