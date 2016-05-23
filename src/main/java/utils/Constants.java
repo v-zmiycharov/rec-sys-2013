@@ -23,4 +23,7 @@ public class Constants {
 	public static final String SUBMISSION_ITEM = "./submissions/itemBased.csv";
 	public static final String SUBMISSION_SVD = "./submissions/svd.csv";
 	public static final String SUBMISSION_SVD_PLUS_PLUS = "./submissions/svdPlusPlus.csv";
+
+	public static final String BUSINESS_CONVERTOR = "./convertor/business.json";
+	public static final String USER_CONVERTOR = "./convertor/user.json";
 }

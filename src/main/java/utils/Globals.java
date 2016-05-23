@@ -42,7 +42,7 @@ public class Globals {
 		initCheckins();
 		initUsers();
 		
-		boolean trainModels = true;
+		boolean trainModels = false;
 		if(trainModels)
 			initTrainReviews();
 
