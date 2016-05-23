@@ -15,4 +15,7 @@ public class Constants {
 
 	public static final String STATISTICS_REVIEW_POINTS_PATH = "./statistics/review_points.dat";
 	public static final String STATISTICS_CHECKIN_POINTS_PATH = "./statistics/checkin_points.dat";
+	
+	public static final String REVIEWS_DAT_FILE = "./_DATA/datamodel/reviews.dat";
+	public static final String REVIEWS_DAT_FILE_TEST = "./_DATA/datamodel/reviewsTest.dat";
 }
