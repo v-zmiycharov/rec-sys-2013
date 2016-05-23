@@ -36,7 +36,6 @@ public class Evaluator {
 	public Evaluator(String modelPath) throws IOException{
 		File file = new File(modelPath);
 		model = new FileDataModel(file, "::");
-		
 	}
 
 	public void userBased(List<Review> reviewsForEvaluation) throws TasteException{

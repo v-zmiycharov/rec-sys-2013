@@ -11,8 +11,6 @@ public class Program {
 	public static void main(String[] args) throws Exception {
 		Globals.init();
 		
-//		DataModelGenerator.writeDataModel(Constants.REVIEWS_DAT_FILE);
-		
 		Evaluator eval = new Evaluator(Constants.REVIEWS_DAT_FILE);
 
 		// Uncomment ONE

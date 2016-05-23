@@ -16,11 +16,7 @@ public class DataModelGenerator {
 
 private static Writer writer;
 	
-	public static void writeDataModel(String reviewPath) throws FileNotFoundException, UnsupportedEncodingException{
-			createReviewsFile(reviewPath);		
-	}
-	
-	private static void createReviewsFile(String reviewPath) throws UnsupportedEncodingException, FileNotFoundException {
+	public static void writeDataModel() throws UnsupportedEncodingException, FileNotFoundException {
 		if (Globals.TRAIN_REVIEWS != null) {
 
 			writer = new BufferedWriter(new OutputStreamWriter(

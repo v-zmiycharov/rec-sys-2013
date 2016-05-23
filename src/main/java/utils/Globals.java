@@ -13,6 +13,7 @@ import data.Business;
 import data.Checkin;
 import data.Review;
 import data.User;
+import evaluator.DataModelGenerator;
 
 public class Globals {
 	public static List<Business> BUSINESSES;
@@ -24,14 +25,18 @@ public class Globals {
 	public static List<Review> TEST_REVIEWS;
 
 	public static void init() throws Exception {
+		initBusinesses();
+		initCheckins();
+		initUsers();
+		// 	UNCOMMENT TO REGENERATE TRAIN MODEL
+		//	initTrainReviews();
+		//	DataModelGenerator.writeDataModel();
+		initTestReviews();
+	}
+	
+	public static void initBusinesses() throws Exception {
 		Gson gson = new Gson();
-
 		BUSINESSES = new ArrayList<Business>();
-		CHECKINS = new ArrayList<Checkin>();
-		USERS = new ArrayList<User>();
-
-		TRAIN_REVIEWS = new ArrayList<Review>();
-		TEST_REVIEWS = new ArrayList<Review>();
 
 		System.out.println("Read Businesses");
 		for (String line : FileReader.getLines(Constants.TRAIN_BUSINESS_PATH)) {
@@ -40,6 +45,11 @@ public class Globals {
 		for (String line : FileReader.getLines(Constants.TEST_BUSINESS_PATH)) {
 			BUSINESSES.add(gson.fromJson(line, Business.class));
 		}
+	}
+
+	public static void initCheckins() throws Exception {
+		Gson gson = new Gson();
+		CHECKINS = new ArrayList<Checkin>();
 
 		System.out.println("Read Checkins");
 		for (String line : FileReader.getLines(Constants.TRAIN_CHECKIN_PATH)) {
@@ -48,6 +58,11 @@ public class Globals {
 		for (String line : FileReader.getLines(Constants.TEST_CHECKIN_PATH)) {
 			CHECKINS.add(gson.fromJson(line, Checkin.class));
 		}
+	}
+
+	public static void initUsers() throws Exception {
+		Gson gson = new Gson();
+		USERS = new ArrayList<User>();
 
 		System.out.println("Read Users");
 		for (String line : FileReader.getLines(Constants.TRAIN_USER_PATH)) {
@@ -56,11 +71,21 @@ public class Globals {
 		for (String line : FileReader.getLines(Constants.TEST_USER_PATH)) {
 			USERS.add(gson.fromJson(line, User.class));
 		}
+	}
+
+	public static void initTrainReviews() throws Exception {
+		Gson gson = new Gson();
+		TRAIN_REVIEWS = new ArrayList<Review>();
 
 		System.out.println("Read Train reviews");
 		for (String line : FileReader.getLines(Constants.TRAIN_REVIEW_PATH)) {
 			TRAIN_REVIEWS.add(gson.fromJson(line, Review.class));
 		}
+	}
+
+	public static void initTestReviews() throws Exception {
+		Gson gson = new Gson();
+		TEST_REVIEWS = new ArrayList<Review>();
 
 		System.out.println("Read Test reviews");
 		for (String line : FileReader.getLines(Constants.TEST_REVIEW_PATH)) {
