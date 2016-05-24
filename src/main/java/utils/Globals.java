@@ -37,6 +37,9 @@ public class Globals {
 	public static Map<String, Double> SvdResults;
 	public static Map<String, Double> SvdPlusPlusResults;
 
+	public static Map<String, Double> BusinessAverages;
+	public static Map<String, Double> UserAverages;
+
 	public static void init() throws Exception {
 		initBusinesses();
 		initCheckins();
@@ -55,12 +58,16 @@ public class Globals {
 	}
 	
 	private static void initBusinesses() throws Exception {
+		BusinessAverages = new HashMap<String, Double>();
+		
 		Gson gson = new Gson();
 		BUSINESSES = new ArrayList<Business>();
 
 		System.out.println("Read Businesses");
 		for (String line : FileReader.getLines(Constants.TRAIN_BUSINESS_PATH)) {
-			BUSINESSES.add(gson.fromJson(line, Business.class));
+			Business business = gson.fromJson(line, Business.class);
+			BUSINESSES.add(business);
+			BusinessAverages.put(business.getBusiness_id(), business.getStars());
 		}
 		for (String line : FileReader.getLines(Constants.TEST_BUSINESS_PATH)) {
 			BUSINESSES.add(gson.fromJson(line, Business.class));
@@ -81,12 +88,16 @@ public class Globals {
 	}
 
 	private static void initUsers() throws Exception {
+		UserAverages = new HashMap<String, Double>();
+		
 		Gson gson = new Gson();
 		USERS = new ArrayList<User>();
 
 		System.out.println("Read Users");
 		for (String line : FileReader.getLines(Constants.TRAIN_USER_PATH)) {
-			USERS.add(gson.fromJson(line, User.class));
+			User user = gson.fromJson(line, User.class);
+			USERS.add(user);
+			UserAverages.put(user.getUser_id(), user.getAverage_stars());
 		}
 		for (String line : FileReader.getLines(Constants.TEST_USER_PATH)) {
 			USERS.add(gson.fromJson(line, User.class));
