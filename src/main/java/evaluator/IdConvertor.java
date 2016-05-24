@@ -19,6 +19,7 @@ public class IdConvertor {
 	private static Map<String, Double> BusinessesConvertorMap;
 	private static Map<String, Double> UsersConvertorMap;
 
+	@SuppressWarnings("unchecked")
 	public static void init() throws Exception {
 		Gson gson = new Gson();
 

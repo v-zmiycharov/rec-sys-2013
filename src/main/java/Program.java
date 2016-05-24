@@ -18,9 +18,9 @@ public class Program {
 	
 			// Uncomment ONE
 			// eval.userBased();
-			eval.itemBased();
-			// eval.svd();
- 			// eval.svdPlusPlus();
+			// eval.itemBased();
+			eval.svd();
+			// eval.svdPlusPlus();
 		}
 		else {
 			// read from submission files

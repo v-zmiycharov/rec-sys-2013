@@ -11,10 +11,10 @@ Comments:
 STUPID FORMAT! Users, businesses x2, missing users! ?!
 
 Time:
-user based: 6 min
+user based: 3 min
 item based: 10 seconds
 svd: 50 min
-svd++: 4 min
+svd++: 7 min
 
 Results:
 user based:
