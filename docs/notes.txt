@@ -16,10 +16,10 @@ item based: 10 seconds
 svd: 50 min
 svd++: 7 min
 
-Results:
-user based:
-item based:
-svd:
-svd++:
+Results (RMSE):
+user based: 1.30467; 132 place
+item based: 1.31005; 134 place
+svd: 1.36046; 150 place
+svd++: 1.42361; 154 place
 
 Mixed:

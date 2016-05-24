@@ -90,6 +90,9 @@ public class Evaluator {
 				float estimation = recommender.estimatePreference(IdConvertor.convertUserId(review.getUser_id()),
 						IdConvertor.convertBusinessId(review.getBusiness_id()));
 				if (estimation >= 0) {
+					if(estimation > 5) {
+						estimation = 5;
+					}
 					review.setStars(estimation);
 					continue;
 				}
@@ -116,7 +119,7 @@ public class Evaluator {
 			double stars = 0.04 * StatisticsClassifier.getStarsByIsOpen(review.getBusiness_id())
 					+ 0.04 * StatisticsClassifier.getStarsByCheckinsCount(review.getBusiness_id())
 					+ 0.04 * StatisticsClassifier.getStarsByReviewsCount(review.getBusiness_id())
-					+ 0.88 * Globals.SvdResults.get(review.getReview_id());
+					+ 0.88 * Globals.UserBasedResults.get(review.getReview_id());
 
 			review.setStars(stars);
 		}
