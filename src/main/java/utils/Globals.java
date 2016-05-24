@@ -22,6 +22,7 @@ import data.Review;
 import data.User;
 import evaluator.DataModelGenerator;
 import evaluator.IdConvertor;
+import statistics.StatisticsClassifier;
 
 public class Globals {
 	public static List<Business> BUSINESSES;
@@ -55,6 +56,8 @@ public class Globals {
 		
 		if(trainModels)
 			DataModelGenerator.writeDataModel();
+
+		StatisticsClassifier.init();
 	}
 	
 	private static void initBusinesses() throws Exception {

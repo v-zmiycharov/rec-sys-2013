@@ -85,30 +85,38 @@ public class Evaluator {
 
 	private void evaluateReviews(Recommender recommender) throws Exception {
 		for (Review review : Globals.TEST_REVIEWS) {
-			try {
+			if(Globals.UserAverages.containsKey(review.getUser_id())
+					&& Globals.BusinessAverages.containsKey(review.getBusiness_id())) {
 				float estimation = recommender.estimatePreference(IdConvertor.convertUserId(review.getUser_id()),
 						IdConvertor.convertBusinessId(review.getBusiness_id()));
-				if (estimation >= 0)
+				if (estimation >= 0) {
 					review.setStars(estimation);
-				else
-					System.out.println("Review: " + review.getReview_id() + " = "
-					+ review.getUser_id() + " - " + review.getBusiness_id() + ":"+estimation );
-			} catch (NoSuchUserException ex) {
-				System.out.println("User " + review.getUser_id() + " not found!");
-			} catch (NoSuchItemException ex) {
-				System.out.println("Item " + review.getBusiness_id() + " not found!");
+					continue;
+				}
 			}
+			else if(Globals.BusinessAverages.containsKey(review.getBusiness_id())) {
+				review.setStars(Globals.BusinessAverages.get(review.getBusiness_id()));
+				continue;
+			}
+			else if(Globals.UserAverages.containsKey(review.getUser_id())) {
+				review.setStars(Globals.UserAverages.get(review.getUser_id()));
+				continue;
+			}
+			
+			double stars = 0.33 * StatisticsClassifier.getStarsByIsOpen(review.getBusiness_id())
+					+ 0.33 * StatisticsClassifier.getStarsByCheckinsCount(review.getBusiness_id())
+					+ 0.34 * StatisticsClassifier.getStarsByReviewsCount(review.getBusiness_id());
+
+			review.setStars(stars);
 		}
 	}
 	
 	public static void calculateFinalResults() throws Exception {
-		StatisticsClassifier.init();
-
 		for (Review review : Globals.TEST_REVIEWS) {
-			double stars = 0.4 * StatisticsClassifier.getStarsByIsOpen(review.getBusiness_id())
-					+ 0.4 * StatisticsClassifier.getStarsByCheckinsCount(review.getBusiness_id())
-					+ 0.4 * StatisticsClassifier.getStarsByReviewsCount(review.getBusiness_id())
-					+ 8.8 * Globals.SvdResults.get(review.getReview_id());
+			double stars = 0.04 * StatisticsClassifier.getStarsByIsOpen(review.getBusiness_id())
+					+ 0.04 * StatisticsClassifier.getStarsByCheckinsCount(review.getBusiness_id())
+					+ 0.04 * StatisticsClassifier.getStarsByReviewsCount(review.getBusiness_id())
+					+ 0.88 * Globals.SvdResults.get(review.getReview_id());
 
 			review.setStars(stars);
 		}
