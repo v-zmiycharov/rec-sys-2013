@@ -11,7 +11,7 @@ public class Program {
 	public static void main(String[] args) throws Exception {
 		Globals.init();
 		
-		boolean runEval = true;
+		boolean runEval = false;
 		
 		if(runEval) {
 			Evaluator eval = new Evaluator(Constants.REVIEWS_DAT_FILE);
