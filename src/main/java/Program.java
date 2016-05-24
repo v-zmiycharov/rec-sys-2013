@@ -17,16 +17,16 @@ public class Program {
 			Evaluator eval = new Evaluator(Constants.REVIEWS_DAT_FILE);
 	
 			// Uncomment ONE
-			// eval.userBased(Globals.TEST_REVIEWS);
-			eval.itemBased(Globals.TEST_REVIEWS);
-			// eval.svd(Globals.TEST_REVIEWS);
- 			// eval.svdPlusPlus(Globals.TEST_REVIEWS);
+			// eval.userBased();
+			eval.itemBased();
+			// eval.svd();
+ 			// eval.svdPlusPlus();
 		}
 		else {
 			// read from submission files
 			Globals.initSubmissionResults();
 			
-			Evaluator.calculateFinalResults(Globals.TEST_REVIEWS);
+			Evaluator.calculateFinalResults();
 		}
 		
 		SubmissionGenerator.generateSubmissions();

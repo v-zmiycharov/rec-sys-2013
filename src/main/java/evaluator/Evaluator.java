@@ -30,118 +30,86 @@ import utils.Globals;
 import data.Review;
 import statistics.StatisticsClassifier;
 
-
 public class Evaluator {
-	
+
 	private DataModel model;
-	
-	public Evaluator(String modelPath) throws IOException{
+
+	public Evaluator(String modelPath) throws IOException {
 		File file = new File(modelPath);
 		model = new FileDataModel(file, "::");
 	}
 
-	public void userBased(List<Review> reviewsForEvaluation) throws Exception{
-		System.out.println("Users based started!" +  new Date().toString());
-	
+	public void userBased() throws Exception {
+		System.out.println("Users based started!" + new Date().toString());
+
 		UserSimilarity similarity = new PearsonCorrelationSimilarity(model);
 		UserNeighborhood neighborhood = new ThresholdUserNeighborhood(0.5, similarity, model);
 		UserBasedRecommender recommender = new GenericUserBasedRecommender(model, neighborhood, similarity);
-		
-		for(Review review : reviewsForEvaluation){
-			try{
-			float estimation = recommender.estimatePreference(IdConvertor.convertUserId(review.getUser_id()), IdConvertor.convertBusinessId(review.getBusiness_id()));
-			if(estimation >= 0){
-				review.setStars(estimation);
-				//System.out.println("Review: " + review.getReview_id() + " = " + review.getUser_id() + " - " + review.getBusiness_id() + ": "+estimation );
-			}
-				
-//			System.out.println("Review: " + review.getReview_id() + " = " + review.getUser_id() + " - " + review.getBusiness_id() + ": "+estimation );
-			}catch(NoSuchUserException ex){
-//				System.out.println("User " + review.getUser_id() + " not found!");
-			}catch(NoSuchItemException ex){
-//				System.out.println("Item " + review.getBusiness_id() + " not found!");
-			}
-		}
-		
-		System.out.println("Users based ended!" +  new Date().toString());
+
+		evaluateReviews(recommender);
+
+		System.out.println("Users based ended!" + new Date().toString());
 
 	}
-	
-	public  void itemBased(List<Review> reviewsForEvaluation) throws Exception{
-		System.out.println("Items based started!" +  new Date().toString());
-		
-		ItemSimilarity itemSimilarity = new EuclideanDistanceSimilarity (model);
-		Recommender recommender = new GenericItemBasedRecommender(model,itemSimilarity);
-		
-		for(Review review : reviewsForEvaluation){
-			try{
-			float estimation = recommender.estimatePreference(IdConvertor.convertUserId(review.getUser_id()), IdConvertor.convertBusinessId(review.getBusiness_id()));
-			if(estimation >= 0)
-				review.setStars(estimation);
-//				System.out.println("Review: " + review.getReview_id() + " = " + review.getUser_id() + " - " + review.getBusiness_id() + ": "+estimation );
-			}catch(NoSuchUserException ex){
-//				System.out.println("User " + review.getUser_id() + " not found!");
-			}catch(NoSuchItemException ex){
-//				System.out.println("Item " + review.getBusiness_id() + " not found!");
-			}
-		}
 
-		System.out.println("Items based ended!" +  new Date().toString());
-	}
-	
-	public  void svd(List<Review> reviewsForEvaluation) throws Exception{
-		System.out.println("SVD started!" +  new Date().toString());
-		
-		Recommender recommender=new SVDRecommender(model,new ALSWRFactorizer(model, 30, 0.065, 100));
-		
-		for(Review review : reviewsForEvaluation){
-			try{
-			float estimation = recommender.estimatePreference(IdConvertor.convertUserId(review.getUser_id()), IdConvertor.convertBusinessId(review.getBusiness_id()));
-			if(estimation >= 0)
-				review.setStars(estimation);
-//				System.out.println("Review: " + review.getReview_id() + " = " + review.getUser_id() + " - " + review.getBusiness_id() + ": "+estimation );
-			}catch(NoSuchUserException ex){
-//				System.out.println("User " + review.getUser_id() + " not found!");
-			}catch(NoSuchItemException ex){
-//				System.out.println("Item " + review.getBusiness_id() + " not found!");
-			}
-		}
-		
-		System.out.println("SVD ended!" +  new Date().toString());
-	}
-	
-	public void svdPlusPlus(List<Review> reviewsForEvaluation) throws Exception{
-		System.out.println("SVD++ started!" +  new Date().toString());
-		
-		Recommender recommender=new SVDRecommender(model,new SVDPlusPlusFactorizer(model, 30, 100));
-		
-		for(Review review : reviewsForEvaluation){
-			try{
-			float estimation = recommender.estimatePreference(IdConvertor.convertUserId(review.getUser_id()), IdConvertor.convertBusinessId(review.getBusiness_id()));
-			if(estimation >= 0)
-				review.setStars(estimation);
-//				System.out.println("Review: " + review.getReview_id() + " = " + review.getUser_id() + " - " + review.getBusiness_id() + ": "+estimation );
-			}catch(NoSuchUserException ex){
-//				System.out.println("User " + review.getUser_id() + " not found!");
-			}catch(NoSuchItemException ex){
-//				System.out.println("Item " + review.getBusiness_id() + " not found!");
-			}
-		}
+	public void itemBased() throws Exception {
+		System.out.println("Items based started!" + new Date().toString());
 
-		System.out.println("SVD++ ended!" +  new Date().toString());
+		ItemSimilarity itemSimilarity = new EuclideanDistanceSimilarity(model);
+		Recommender recommender = new GenericItemBasedRecommender(model, itemSimilarity);
+
+		evaluateReviews(recommender);
+
+		System.out.println("Items based ended!" + new Date().toString());
 	}
 
+	public void svd() throws Exception {
+		System.out.println("SVD started!" + new Date().toString());
+
+		Recommender recommender = new SVDRecommender(model, new ALSWRFactorizer(model, 30, 0.065, 100));
+
+		evaluateReviews(recommender);
+
+		System.out.println("SVD ended!" + new Date().toString());
+	}
+
+	public void svdPlusPlus() throws Exception {
+		System.out.println("SVD++ started!" + new Date().toString());
+
+		Recommender recommender = new SVDRecommender(model, new SVDPlusPlusFactorizer(model, 30, 100));
+
+		evaluateReviews(recommender);
+
+		System.out.println("SVD++ ended!" + new Date().toString());
+	}
+
+	private void evaluateReviews(Recommender recommender) throws Exception {
+		for (Review review : Globals.TEST_REVIEWS) {
+			try {
+				float estimation = recommender.estimatePreference(IdConvertor.convertUserId(review.getUser_id()),
+						IdConvertor.convertBusinessId(review.getBusiness_id()));
+				if (estimation >= 0)
+					review.setStars(estimation);
+				else
+					System.out.println("Review: " + review.getReview_id() + " = "
+					+ review.getUser_id() + " - " + review.getBusiness_id() + ":"+estimation );
+			} catch (NoSuchUserException ex) {
+				System.out.println("User " + review.getUser_id() + " not found!");
+			} catch (NoSuchItemException ex) {
+				System.out.println("Item " + review.getBusiness_id() + " not found!");
+			}
+		}
+	}
 	
-	public static void calculateFinalResults(List<Review> reviewsForEvaluation) throws Exception{
+	public static void calculateFinalResults() throws Exception {
 		StatisticsClassifier.init();
-		
-		for(Review review : reviewsForEvaluation){
-			double stars = 
-					0.4 * StatisticsClassifier.getStarsByIsOpen(review.getBusiness_id())
+
+		for (Review review : Globals.TEST_REVIEWS) {
+			double stars = 0.4 * StatisticsClassifier.getStarsByIsOpen(review.getBusiness_id())
 					+ 0.4 * StatisticsClassifier.getStarsByCheckinsCount(review.getBusiness_id())
 					+ 0.4 * StatisticsClassifier.getStarsByReviewsCount(review.getBusiness_id())
 					+ 8.8 * Globals.SvdResults.get(review.getReview_id());
-			
+
 			review.setStars(stars);
 		}
 	}
