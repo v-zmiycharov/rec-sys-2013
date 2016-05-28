@@ -116,10 +116,10 @@ public class Evaluator {
 	
 	public static void calculateFinalResults() throws Exception {
 		for (Review review : Globals.TEST_REVIEWS) {
-			double stars = 0.2 * StatisticsClassifier.getStarsByIsOpen(review.getBusiness_id())
-					+ 0.2 * StatisticsClassifier.getStarsByCheckinsCount(review.getBusiness_id())
-					+ 0.2 * StatisticsClassifier.getStarsByReviewsCount(review.getBusiness_id())
-					+ 0.4 * Globals.UserBasedResults.get(review.getReview_id());
+			double stars = 0.15 * StatisticsClassifier.getStarsByIsOpen(review.getBusiness_id())
+					+ 0.15 * StatisticsClassifier.getStarsByCheckinsCount(review.getBusiness_id())
+					+ 0.15 * StatisticsClassifier.getStarsByReviewsCount(review.getBusiness_id())
+					+ 0.55 * Globals.UserBasedResults.get(review.getReview_id());
 
 			review.setStars(stars);
 		}
